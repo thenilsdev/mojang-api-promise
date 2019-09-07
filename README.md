@@ -1,5 +1,6 @@
 <div align="center">
-![Logo](https://img.nilsdev.io/58bc4/5d72dcac48cfd.png)
+
+![Logo](https://img.nilsdev.io/58bc4/5d72dcac48cfd.png/raw)
 
 # mojang-api-promise
 
