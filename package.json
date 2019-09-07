@@ -1,7 +1,14 @@
 {
   "name": "mojang-api-promise",
   "version": "1.0.1",
-  "description": "",
+  "description": "A Mojang api library with promise support",
+  "keywords": [
+    "mojang",
+    "api",
+    "promise",
+    "async",
+    "await"
+  ],
   "main": "src/index.js",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
