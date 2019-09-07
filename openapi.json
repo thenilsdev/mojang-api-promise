@@ -1,0 +1,277 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "https://api.mojang.com"
+  } ],
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "MojangAPI",
+    "contact" : {
+      "name" : "Nils \"NilsDev\" Müller",
+      "email" : "api.contact@ni.ls"
+    }
+  },
+  "paths" : {
+    "/users/profiles/minecraft/{username}" : {
+      "get" : {
+        "operationId" : "usernameToUuid",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UsernameToUuidReponse"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "no content"
+          },
+          "400" : {
+            "description" : "bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "username",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "Username"
+        }, {
+          "in" : "query",
+          "name" : "at",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "description" : "Timestamp"
+        } ]
+      }
+    },
+    "/user/profiles/{uuid}/names" : {
+      "get" : {
+        "operationId" : "uuidToUsernames",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UuidToUsernamesReponse"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "no content"
+          },
+          "400" : {
+            "description" : "bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "UUID"
+        } ]
+      }
+    },
+    "/profiles/minecraft" : {
+      "post" : {
+        "operationId" : "batchUsernameToUuids",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchUsernameToUuidResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchUsernameToUuidRequest"
+              }
+            }
+          },
+          "description" : "Usernames"
+        }
+      }
+    },
+    "/session/minecraft/profile/{uuid}" : {
+      "get" : {
+        "servers" : [ {
+          "url" : "https://sessionserver.mojang.com"
+        } ],
+        "operationId" : "uuidToSkin",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UuidToSkinResponse"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "no content"
+          },
+          "429" : {
+            "description" : "too many requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "UUID"
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Error" : {
+        "type" : "object",
+        "required" : [ "error", "errorMessage" ],
+        "properties" : {
+          "error" : {
+            "type" : "string",
+            "example" : "error"
+          },
+          "errorMessage" : {
+            "type" : "string",
+            "example" : "error message"
+          }
+        }
+      },
+      "UsernameToUuidReponse" : {
+        "type" : "object",
+        "required" : [ "id", "name" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "293b912a76c14353b37cc96af06e708b"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "NilsDev"
+          }
+        }
+      },
+      "UuidToUsernamesReponse" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "required" : [ "name" ],
+          "properties" : {
+            "name" : {
+              "type" : "string",
+              "example" : "NilsDev"
+            },
+            "changedToAt" : {
+              "type" : "integer"
+            }
+          }
+        }
+      },
+      "BatchUsernameToUuidRequest" : {
+        "type" : "array",
+        "items" : {
+          "type" : "string",
+          "example" : "NilsDev"
+        }
+      },
+      "BatchUsernameToUuidResponse" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "required" : [ "id", "name" ],
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "example" : "293b912a76c14353b37cc96af06e708b"
+            },
+            "name" : {
+              "type" : "string",
+              "example" : "NilsDev"
+            }
+          }
+        }
+      },
+      "UuidToSkinResponse" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "required" : [ "id", "name" ],
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "example" : "293b912a76c14353b37cc96af06e708b"
+            },
+            "name" : {
+              "type" : "string",
+              "example" : "NilsDev"
+            },
+            "properties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "required" : [ "name", "value" ],
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "textures"
+                  },
+                  "value" : {
+                    "type" : "string",
+                    "example" : "eyJ0aW1lc3RhbXAiOjE1Njc4MDQzMTQyNjksInByb2ZpbGVJZCI6ImZiNjBjY2JlNmVkNzQyY2M5YzQwMDc2ZGM2MzczYjQyIiwicHJvZmlsZU5hbWUiOiJOaWxzRGV2IiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2Q1OTM0NTBjZjA5NmYyN2JjMmFjMGZjMGQ1OGVlMGFjYWZiYzk1NTgxN2NjNzJiYzAxNGJmZmZjNjU4NTI2NGUifX19"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
